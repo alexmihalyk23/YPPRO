@@ -22,14 +22,14 @@ def train():
     TIMER = 30
     bot_utils.bestpt_copy()
     TIMER += 10
-    bot_utils.pt2onnx('dataset')
+    model_path = bot_utils.pt2onnx('dataset')
     TIMER += 10
-    bot_utils.onnx2tmfile()
+    # bot_utils.onnx2tmfile()
     TIMER += 10
-    quant_model_path = bot_utils.quantization('dataset')
-    print(quant_model_path)
+    # quant_model_path = bot_utils.quantization('dataset')
+    # print(quant_model_path)
     TIMER +=25
-    return quant_model_path
+    return model_path
 
 @app.route('/')
 def home():

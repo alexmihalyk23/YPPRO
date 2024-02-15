@@ -78,24 +78,24 @@ def pt2onnx(path):
     onnx_path = os.path.join(proj_dir, 'best.onnx')
     return onnx_path
 
-def onnx2tmfile():
-    '''
-        -f onnx 
-        -m input model (best.onnx)
-        -o output model (best.tmfile)
+# def onnx2tmfile():
+#     '''
+#         -f onnx 
+#         -m input model (best.onnx)
+#         -o output model (best.tmfile)
 
-    '''
-    proj_dir = PRE_PATH #os.path.join(PRE_PATH, path)
-    onnx_path = os.path.join(proj_dir, 'best.onnx')
-    tmfile_path = os.path.join(proj_dir, 'best.tmfile')
-    args = ('/path/to/convert_tool/convert_tool',
-                '-f', 'onnx',
-                '-m', onnx_path,
-                '-o', tmfile_path)
-    popen = subprocess.Popen(args, stdout=subprocess.PIPE)
-    popen.wait()
-    print('process', popen.returncode)
-    return tmfile_path
+#     '''
+#     proj_dir = PRE_PATH #os.path.join(PRE_PATH, path)
+#     onnx_path = os.path.join(proj_dir, 'best.onnx')
+#     tmfile_path = os.path.join(proj_dir, 'best.tmfile')
+#     args = ('/path/to/convert_tool/convert_tool',
+#                 '-f', 'onnx',
+#                 '-m', onnx_path,
+#                 '-o', tmfile_path)
+#     popen = subprocess.Popen(args, stdout=subprocess.PIPE)
+#     popen.wait()
+#     print('process', popen.returncode)
+#     return tmfile_path
 
 def quantization(path):
     proj_dir = os.path.join(PRE_PATH, path)
