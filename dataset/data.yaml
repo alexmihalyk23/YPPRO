@@ -1,0 +1,13 @@
+train: ../dataset/train/images
+val: ../dataset/valid/images
+test: ../dataset/test/images
+
+nc: 1
+names: ['person']
+
+roboflow:
+  workspace: smartdrones
+  project: sattelite-50m
+  version: 17
+  license: MIT
+  url: https://universe.roboflow.com/smartdrones/sattelite-50m/dataset/17
