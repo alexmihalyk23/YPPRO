@@ -1,0 +1,28 @@
+.material-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.material-button:hover {
+    background-color: #1976D2;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar .progress {
+    height: 100%;
+    background-color: #2196F3;
+    transition: width 0.3s ease;
+}
