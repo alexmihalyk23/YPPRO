@@ -2,9 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/static/main.css">
     
@@ -15,7 +13,6 @@
         $('.progress-bar-label').text(event.data+'%');
         if(event.data == 20){
             document.getElementById("status").innerHTML = "Обучение";
-
         }
         else if (event.data == 40){
             document.getElementById("status").innerHTML = "Создание onnx файла";
@@ -59,6 +56,11 @@
             xhr.open('POST', 'http://127.0.0.1:4444');
             xhr.send(formData);
 
+            document.querySelector('.progress').style.display = 'block';
+
+            document.getElementById('zipFile').style.display = 'none';
+            document.getElementById('sendButton').style.display = 'none';
+
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
@@ -66,10 +68,11 @@
                     // alert('Sent');
 
                     var downloadButton = document.createElement('a');
+                    downloadButton.id = 'downloadButton'
                     downloadButton.href = 'http://127.0.0.1:4444/download/best.onnx';
                     downloadButton.download = 'best.onnx';
-                    downloadButton.innerHTML = 'Скачать best.onnx';
-                    // downloadButton.classList.add('mb-button'); // Add Material Design class
+                    downloadButton.innerHTML = 'Download file';
+                    downloadButton.classList.add('container'); // Add Material Design class
                     document.body.appendChild(downloadButton);
                 }
             };
