@@ -13,6 +13,27 @@ span {
     font-family: sans-serif;
 }
 
+
+
+.attach-file input[type="file"] {
+    display: none;
+}
+        
+.attach-file .button {
+    padding: 15px 75px;
+    background-color: #595B62;
+    color: #CE8fff;
+    border: 5px solid #9246CD;
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size: 32px;
+    margin: 0 auto;
+    display: flex;
+    margin-top: 100px;
+}
+
 #status {
     color: #ffffff;
     text-align: center;
@@ -58,6 +79,9 @@ span {
 display: flex;
 justify-content: center;
 }
+
+
+
 
 .progress {
     display: none;

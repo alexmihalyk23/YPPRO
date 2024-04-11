@@ -28,9 +28,13 @@
 <body>
     <h1>Выберите zip архив</h1>
     <div class="container">
-        <input type="file" id="zipFile" accept=".zip">
+
+    <label class="attach-file">
+      <input type="file" id="zipFile"  accept=".zip"/>
+      <div class="button" id="selectButton">Выберите файл</div>
+    </label>
     </div>
-    <button id="sendButton" disabled class="md-button">Send file</button>
+    <button id="sendButton" disabled class="md-button">Обучить!</button>
     <div id="status"></div>
 
     <script>
@@ -39,9 +43,16 @@
             var sendButton = document.getElementById('sendButton');
 
             if (fileInput.files.length > 0) {
+                
                 sendButton.disabled = false;
+                zipFile.disabled = true;
+                selectButton.innerText = 'Загружено!';
+                selectButton.disabled = true;
             } else {
+
                 sendButton.disabled = true;
+                 selectButton.innerText = 'Выберите файл';
+                 selectButton.disabled = false;
             }
         });
 
@@ -59,6 +70,7 @@
             document.querySelector('.progress').style.display = 'block';
 
             document.getElementById('zipFile').style.display = 'none';
+             document.getElementById('selectButton').style.display = 'none';
             document.getElementById('sendButton').style.display = 'none';
 
 

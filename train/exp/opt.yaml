@@ -1,6 +1,6 @@
 weights: ../yolov5m_leaky.pt
-cfg: /home/vasilina/YPPRO/yolov5/models/yolov5m.yaml
-data: /home/vasilina/YPPRO/dataset/data.yaml
+cfg: /home/alex/Jupyter/YPPRO/yolov5/models/yolov5m.yaml
+data: /home/alex/Jupyter/YPPRO/dataset/data.yaml
 hyp: data/hyps/hyp.scratch.yaml
 epochs: 3
 batch_size: 2
@@ -20,7 +20,7 @@ single_cls: false
 adam: false
 sync_bn: false
 workers: 8
-project: /home/vasilina/YPPRO/train
+project: /home/alex/Jupyter/YPPRO/train
 name: exp
 exist_ok: false
 quad: false
@@ -34,4 +34,4 @@ entity: null
 upload_dataset: false
 bbox_interval: -1
 artifact_alias: latest
-save_dir: /home/vasilina/YPPRO/train/exp
+save_dir: /home/alex/Jupyter/YPPRO/train/exp
