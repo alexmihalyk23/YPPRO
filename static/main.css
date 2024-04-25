@@ -60,7 +60,7 @@ span {
 }
 
 /* Material Design Button Style */
-.md-button, #zipFile::file-selector-button {
+.md-button, #backButton, #zipFile::file-selector-button {
     padding: 15px 75px;
     background-color: #595B62;
     color: #CE8fff;

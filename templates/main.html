@@ -85,7 +85,20 @@
                     downloadButton.download = 'best.onnx';
                     downloadButton.innerHTML = 'Download file';
                     downloadButton.classList.add('container'); // Add Material Design class
+                    var backButton = document.createElement('button');
+                    backButton.id = 'backButton';
+                    backButton.innerHTML = 'Назад';
+                    backButton.classList.add('container'); // Добавить класс Material Design
+                    
                     document.body.appendChild(downloadButton);
+                    document.body.appendChild(backButton);
+                    // document.querySelector('.progress').aria-valuenow = 0;
+                    backButton.addEventListener('click', function() {
+                        location.reload();
+                    });
+                     setTimeout(function() {
+            document.querySelector('.progress').style.display = 'none';
+        }, 1000); // 1000 milliseconds = 1 second delay
                 }
             };
             
