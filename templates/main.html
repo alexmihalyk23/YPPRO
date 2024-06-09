@@ -19,7 +19,6 @@
         }
         else if(event.data == 100){
             document.getElementById("status").innerHTML = "Файл успешно создан!";
-            event.data = 0
         }
     }
     </script>
@@ -36,6 +35,10 @@
     </div>
     <button id="sendButton" disabled class="md-button">Обучить!</button>
     <div id="status"></div>
+     <label for="epochs">Введите количество эпох:</label>
+        <input type="text" id="epochs" name="epochs">
+        <label for="imageSize">Введите размер изображения:</label>
+        <input type="text" id="imageSize" name="imageSize">
 
     <script>
         document.getElementById('zipFile').addEventListener('change', function() {
@@ -43,18 +46,17 @@
             var sendButton = document.getElementById('sendButton');
 
             if (fileInput.files.length > 0) {
-                
                 sendButton.disabled = false;
                 zipFile.disabled = true;
                 selectButton.innerText = 'Загружено!';
                 selectButton.disabled = true;
             } else {
-
                 sendButton.disabled = true;
-                 selectButton.innerText = 'Выберите файл';
-                 selectButton.disabled = false;
+                selectButton.innerText = 'Выберите файл';
+                selectButton.disabled = false;
             }
         });
+
 
         document.getElementById('sendButton').addEventListener('click', function() {
             var fileInput = document.getElementById('zipFile');
@@ -70,41 +72,70 @@
             document.querySelector('.progress').style.display = 'block';
 
             document.getElementById('zipFile').style.display = 'none';
-             document.getElementById('selectButton').style.display = 'none';
+            document.getElementById('selectButton').style.display = 'none';
             document.getElementById('sendButton').style.display = 'none';
-
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    
-                    // alert('Sent');
-
                     var downloadButton = document.createElement('a');
-                    downloadButton.id = 'downloadButton'
+                    downloadButton.id = 'downloadButton';
                     downloadButton.href = 'http://127.0.0.1:4444/download/best.onnx';
                     downloadButton.download = 'best.onnx';
-                    downloadButton.innerHTML = 'Download file';
+                    downloadButton.innerHTML = 'Скачать модель';
                     downloadButton.classList.add('container'); // Add Material Design class
+
+                    var checkButton = document.createElement('button');
+                    checkButton.id = 'checkButton';
+                    checkButton.innerHTML = 'Проверить модель';
+                    checkButton.classList.add('container'); // Add Material Design class
+
                     var backButton = document.createElement('button');
                     backButton.id = 'backButton';
                     backButton.innerHTML = 'Назад';
-                    backButton.classList.add('container'); // Добавить класс Material Design
-                    
+                    backButton.classList.add('container'); // Add Material Design class
+
+                    var imageDiv = document.createElement('div');
+                    imageDiv.id = 'imageDiv';
+
                     document.body.appendChild(downloadButton);
+                    document.body.appendChild(checkButton);
                     document.body.appendChild(backButton);
-                    // document.querySelector('.progress').aria-valuenow = 0;
+                    document.body.appendChild(imageDiv);
+
+                    checkButton.addEventListener('click', function() {
+                        var xhrCheck = new XMLHttpRequest();
+                        xhrCheck.open('GET', 'http://127.0.0.1:4444/check_model');
+                        xhrCheck.onload = function() {
+                            if (xhrCheck.status === 200) {
+                                var response = JSON.parse(xhrCheck.responseText);
+                                var resultsPath = response.results_path;
+                                console.log(resultsPath);
+                                // console.log(response['results_path'])
+                                var imageUrl = 'http://127.0.0.1:4444/' + resultsPath;
+                                
+                                var img = document.createElement('img');
+                                img.src = imageUrl;
+                                img.classList.add('container'); // Add Material Design class
+                                imageDiv.innerHTML = '';
+                                imageDiv.appendChild(img);
+                            } else {
+                                alert('Ошибка при проверке модели');
+                            }
+                        };
+                        xhrCheck.send();
+                    });
+
                     backButton.addEventListener('click', function() {
                         location.reload();
                     });
-                     setTimeout(function() {
-            document.querySelector('.progress').style.display = 'none';
-        }, 1000); // 1000 milliseconds = 1 second delay
+
+                    setTimeout(function() {
+                        document.querySelector('.progress').style.display = 'none';
+                        document.getElementById("status").style.display = "none";
+                    }, 1000); // 1000 milliseconds = 1 second delay
                 }
             };
-            
-
         });
-
     </script>
     <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">

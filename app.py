@@ -1,4 +1,4 @@
-from flask import Flask, request,send_file, render_template,send_from_directory, Response
+from flask import Flask, jsonify,request,send_file, render_template,send_from_directory, Response
 import shutil
 import os
 import time
@@ -10,13 +10,13 @@ TIMER = 0
 
 print(os.getcwd())
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+PRE_PATH = os.getcwd()
 
-
-def train():
+def train(epochs=3):
     global TIMER
     print("Training started...")
     TIMER = 20
-    train_res, _ = bot_utils.train_yolo('dataset')
+    train_res, _ = bot_utils.train_yolo('dataset',epoch)
     if not train_res : #Тренировка не была запущена.
         print('train_res', train_res)
     TIMER = 30
@@ -48,9 +48,11 @@ def save_zip():
     
     shutil.unpack_archive(save_path, 'dataset')
     os.remove(save_path)
+    epochs = request.form['epochs']
+    image_size = request.form['imageSize']
     global TIMER
     TIMER += 10
-    train()
+    train(epochs)
     TIMER = 100
     return "File saved", 200
 
@@ -71,6 +73,14 @@ def progress():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/check_model')
+def check_model_route():
+    results_path = bot_utils.check_model('dataset')
+    return jsonify({'results_path': results_path})
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_file(os.path.join(PRE_PATH, path))
+
 if __name__ == '__main__':
-    app.run(debug=True,port=4444)
+    app.run(port=4444)
 

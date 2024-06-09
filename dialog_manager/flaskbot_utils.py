@@ -6,6 +6,7 @@ import io
 import numpy as np
 import json
 import subprocess
+import random
 
 import yolov5.detect as detect
 import yolov5.export as export
@@ -15,7 +16,7 @@ VALID_DATA_PERCENTAGE = 0.2
 BUSY = False
 
 
-def train_yolo(path):
+def train_yolo(path, epochs_n):
     global BUSY
     if BUSY is True:
         return False, '' # png_path
@@ -61,6 +62,29 @@ def train_yolo(path):
     BUSY = False
     png_path = os.path.join(result_dir, 'results.png')
     return True, png_path
+def check_model(path):
+    weights_path = os.path.join(PRE_PATH, 'best.onnx')
+    test_images_dir = os.path.join(PRE_PATH, path, 'test/images')
+    source = os.path.join(PRE_PATH, 'data/images')  # Path to images for testing
+    os.chdir(os.getcwd()+'/yolov5')
+    command = os.getcwd()+'/detect.py'
+    result_path = os.path.join(PRE_PATH, 'detect_results')
+    img = random.choice(os.listdir(test_images_dir))
+    params = f'--weights {weights_path} --source {test_images_dir}/{img} --project {result_path}'
+    popen = subprocess.Popen('python3 '+ command +' ' +  params, executable='/bin/bash', shell=True)
+    popen.wait()
+    os.chdir(PRE_PATH)
+    exp = os.listdir(result_path)
+    print(exp)
+    if len(exp) == 0:
+        return
+    exp.sort()
+    exp.sort(key=len)
+    exp = exp[-1]
+    # # Return path to results or other relevant info
+    results_path = os.path.join("detect_results", f"{exp}") + f"/{img}"
+    print(results_path)
+    return results_path
 
 
 def bestpt_copy():
