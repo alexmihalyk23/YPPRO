@@ -3,8 +3,7 @@ from telebot.types import Message, User, Chat
 import pytest
 from unittest.mock import Mock, patch
 import main
-from dialog_manager.screens import ScreenManager
-from dialog_manager.bot_utils import File
+import dialog_manager
 class MockBot(TeleBot):
     def __init__(self, token):
         super().__init__(token)
@@ -22,8 +21,8 @@ def bot():
     main.bot = mock_bot
     return mock_bot
 
-@patch('File')
-@patch('ScreenManager')
+@patch('dialog_manager.bot_utils.File')
+@patch('dialog_manager.bot_utils.ScreenManager')
 @patch('main.extract_chat_data')
 def test_bot_message(mock_extract_chat_data, MockScreenManager, MockFile, bot):
     mock_extract_chat_data.return_value = (123, '/start')
