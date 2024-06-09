@@ -17,17 +17,18 @@ class MockBot(TeleBot):
 
 @pytest.fixture
 def bot():
-    mock_bot = MockBot("7158514154:AAFeFxYJrzWbC_-IHDDk6Y609uI7GgH0gSQ")
+    mock_bot = MockBot(main.TG_TOKEN)
     main.bot = mock_bot
     return mock_bot
 
+@patch('main.dialog_manager.bot_utils.File')
+@patch('main.dialog_manager.screens.ScreenManager')
 @patch('main.extract_chat_data')
-@patch('main.sm.current_screen')
-@patch('main.sm.update_screen')
-def test_bot_message(mock_update_screen, mock_current_screen, mock_extract_chat_data, bot):
+def test_bot_message(mock_extract_chat_data, MockScreenManager, MockFile, bot):
     mock_extract_chat_data.return_value = (123, '/start')
-    mock_current_screen.return_value.run.return_value = [("Welcome to the bot!", None)]
-    mock_current_screen.return_value.next_screen_name = 'next_screen'
+    mock_screen = MockScreenManager.return_value
+    mock_screen.current_screen.return_value.run.return_value = [("Welcome to the bot!", None)]
+    mock_screen.current_screen.return_value.next_screen_name = 'next_screen'
 
     user = User(1, False, 'TestUser')
     chat = Chat(1, 'private')
@@ -46,5 +47,5 @@ def test_bot_message(mock_update_screen, mock_current_screen, mock_extract_chat_
     assert len(bot.sent_messages) > 0
     assert bot.sent_messages[0][1] == "Welcome to the bot!"
     mock_extract_chat_data.assert_called_once_with(message)
-    mock_current_screen.assert_called_once_with(123, '/start')
-    mock_update_screen.assert_called_once_with(123, 'next_screen')
+    mock_screen.current_screen.assert_called_once_with(123, '/start')
+    mock_screen.update_screen.assert_called_once_with(123, 'next_screen')
