@@ -48,7 +48,7 @@ def test_bot_message(mock_extract_chat_data, MockScreenManager, MockFile, bot):
             main.command_handler(message)
         
             assert len(bot.sent_messages) > 0
-            assert bot.sent_messages[0][1] == "Welcome to the bot!"
+            assert bot.sent_messages[0][1] == "Чтобы добавить данные для тренировки скиньте JSON-файлы.\n Чтобы оценить работу модели скиньте изображение."
             mock_extract_chat_data.assert_called_once_with(message)
             mock_screen.current_screen.assert_called_once_with(123, '/start')
             mock_screen.update_screen.assert_called_once_with(123, 'next_screen')
