@@ -20,7 +20,14 @@ def bot():
 def test_bot_message(bot):
     user = User(1, False, 'TestUser')
     chat = Chat(1, 'private')
-    message = Message(1, user, None, chat, 'text', '/start', [])
+    message = Message(
+        message_id=1,
+        from_user=user,
+        date=None,
+        chat=chat,
+        content_type='text',
+        json_string={'text': '/start'}
+    )
     main.handle_start(message)
     assert len(bot.sent_messages) > 0
     assert bot.sent_messages[0][1] == "Welcome to the bot!"
