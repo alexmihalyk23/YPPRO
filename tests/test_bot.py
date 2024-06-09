@@ -1,5 +1,5 @@
 from telebot import TeleBot
-from telebot.types import Message
+from telebot.types import Message, User, Chat
 import pytest
 import main
 
@@ -18,9 +18,9 @@ def bot():
     return mock_bot
 
 def test_bot_message(bot):
-    message = Message(1, None, None, None, 'text', 'test', None, None, None, None, None, None)
-    message.text = '/start'
+    user = User(1, False, 'TestUser')
+    chat = Chat(1, 'private')
+    message = Message(1, user, None, chat, 'text', '/start', [])
     main.handle_start(message)
     assert len(bot.sent_messages) > 0
     assert bot.sent_messages[0][1] == "Welcome to the bot!"
-
