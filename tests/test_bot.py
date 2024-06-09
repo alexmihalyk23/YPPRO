@@ -1,3 +1,4 @@
+import tempfile
 from telebot import TeleBot
 from telebot.types import Message, User, Chat
 import pytest
@@ -25,27 +26,28 @@ def bot():
 @patch('dialog_manager.screens.ScreenManager')
 @patch('main.extract_chat_data')
 def test_bot_message(mock_extract_chat_data, MockScreenManager, MockFile, bot):
-    mock_extract_chat_data.return_value = (123, '/start')
-    mock_screen = MockScreenManager.return_value
-    mock_screen.current_screen.return_value.run.return_value = [("Welcome to the bot!", None)]
-    mock_screen.current_screen.return_value.next_screen_name = 'next_screen'
+    with tempfile.TemporaryDirectory() as temp_dir:
+        mock_extract_chat_data.return_value = (123, '/start')
+        mock_screen = MockScreenManager.return_value
+        mock_screen.current_screen.return_value.run.return_value = [("Welcome to the bot!", None)]
+        mock_screen.current_screen.return_value.next_screen_name = 'next_screen'
 
-    user = User(1, False, 'TestUser')
-    chat = Chat(1, 'private')
-    message = Message(
-        message_id=1,
-        from_user=user,
-        date=None,
-        chat=chat,
-        content_type='text',
-        options={},
-        json_string={'text': '/start'}
-    )
+        user = User(1, False, 'TestUser')
+        chat = Chat(1, 'private')
+        message = Message(
+            message_id=1,
+            from_user=user,
+            date=None,
+            chat=chat,
+            content_type='text',
+            options={},
+            json_string={'text': '/start'}
+        )
     
-    main.command_handler(message)
+        main.command_handler(message)
     
-    assert len(bot.sent_messages) > 0
-    assert bot.sent_messages[0][1] == "Welcome to the bot!"
-    mock_extract_chat_data.assert_called_once_with(message)
-    mock_screen.current_screen.assert_called_once_with(123, '/start')
-    mock_screen.update_screen.assert_called_once_with(123, 'next_screen')
+        assert len(bot.sent_messages) > 0
+        assert bot.sent_messages[0][1] == "Welcome to the bot!"
+        mock_extract_chat_data.assert_called_once_with(message)
+        mock_screen.current_screen.assert_called_once_with(123, '/start')
+        mock_screen.update_screen.assert_called_once_with(123, 'next_screen')
