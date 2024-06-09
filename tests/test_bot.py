@@ -26,6 +26,7 @@ def test_bot_message(bot):
         date=None,
         chat=chat,
         content_type='text',
+        options={},
         json_string={'text': '/start'}
     )
     main.handle_start(message)
