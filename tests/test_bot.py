@@ -22,7 +22,7 @@ def bot():
     return mock_bot
 
 @patch('dialog_manager.bot_utils.File')
-@patch('dialog_manager.bot_utils.ScreenManager')
+@patch('dialog_manager.bot_utils.States')
 @patch('main.extract_chat_data')
 def test_bot_message(mock_extract_chat_data, MockScreenManager, MockFile, bot):
     mock_extract_chat_data.return_value = (123, '/start')
