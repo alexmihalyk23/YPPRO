@@ -42,7 +42,7 @@ def test_bot_message(mock_extract_chat_data, MockScreenManager, MockFile, bot):
         json_string={'text': '/start'}
     )
     
-    main.message_handler(message)
+    main.command_handler(message)
     
     assert len(bot.sent_messages) > 0
     assert bot.sent_messages[0][1] == "Welcome to the bot!"
