@@ -1,4 +1,5 @@
 import pytest
+import io
 from app import app
 
 @pytest.fixture
