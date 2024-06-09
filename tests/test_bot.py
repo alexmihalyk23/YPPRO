@@ -1,3 +1,4 @@
+import pytest
 from telebot import TeleBot
 from telebot.types import Message
 import main
