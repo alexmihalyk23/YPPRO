@@ -12,11 +12,11 @@ print(os.getcwd())
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 PRE_PATH = os.getcwd()
 
-def train(epochs=3):
+def train(epochs=2):
     global TIMER
     print("Training started...")
     TIMER = 20
-    train_res, _ = bot_utils.train_yolo('dataset',epoch)
+    train_res, _ = bot_utils.train_yolo('dataset',epochs)
     if not train_res : #Тренировка не была запущена.
         print('train_res', train_res)
     TIMER = 30
@@ -45,11 +45,10 @@ def save_zip():
 
     save_path = os.path.join('dataset', file.filename) 
     file.save(save_path)
+    epochs = request.form.get('epochs', default=2, type=int)
     
     shutil.unpack_archive(save_path, 'dataset')
     os.remove(save_path)
-    epochs = request.form['epochs']
-    image_size = request.form['imageSize']
     global TIMER
     TIMER += 10
     train(epochs)

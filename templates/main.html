@@ -17,9 +17,6 @@
         else if (event.data == 40){
             document.getElementById("status").innerHTML = "Создание onnx файла";
         }
-        else if(event.data == 100){
-            document.getElementById("status").innerHTML = "Файл успешно создан!";
-        }
     }
     </script>
     <title>Zip2yolo</title>
@@ -27,23 +24,25 @@
 <body>
     <h1>Выберите zip архив</h1>
     <div class="container">
-
-    <label class="attach-file">
-      <input type="file" id="zipFile"  accept=".zip"/>
-      <div class="button" id="selectButton">Выберите файл</div>
-    </label>
+        <label class="attach-file">
+            <input type="file" name="file" id="zipFile" accept=".zip"/>
+            <div class="button" id="selectButton">Выберите файл</div>
+        </label>
     </div>
+    <label for="epochs">Количество эпох:</label>
+    <input type="number" name="epochs" id="epochs" min="1" value="2">
     <button id="sendButton" disabled class="md-button">Обучить!</button>
     <div id="status"></div>
-     <label for="epochs">Введите количество эпох:</label>
-        <input type="text" id="epochs" name="epochs">
-        <label for="imageSize">Введите размер изображения:</label>
-        <input type="text" id="imageSize" name="imageSize">
+    <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" style="display:none;">
+        <input type="file" name="file" id="hiddenFileInput">
+        <input type="number" name="epochs" id="hiddenEpochsInput">
+    </form>
 
     <script>
         document.getElementById('zipFile').addEventListener('change', function() {
             var fileInput = document.getElementById('zipFile');
             var sendButton = document.getElementById('sendButton');
+            var selectButton = document.getElementById('selectButton');
 
             if (fileInput.files.length > 0) {
                 sendButton.disabled = false;
@@ -57,16 +56,17 @@
             }
         });
 
-
         document.getElementById('sendButton').addEventListener('click', function() {
             var fileInput = document.getElementById('zipFile');
             var file = fileInput.files[0];
+            var epochsInput = document.getElementById('epochs').value;
 
             var formData = new FormData();
             formData.append('file', file);
+            formData.append('epochs', epochsInput);
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://127.0.0.1:4444');
+            xhr.open('POST', '/');
             xhr.send(formData);
 
             document.querySelector('.progress').style.display = 'block';
@@ -79,20 +79,20 @@
                 if (xhr.status === 200) {
                     var downloadButton = document.createElement('a');
                     downloadButton.id = 'downloadButton';
-                    downloadButton.href = 'http://127.0.0.1:4444/download/best.onnx';
+                    downloadButton.href = '/download/best.onnx';
                     downloadButton.download = 'best.onnx';
                     downloadButton.innerHTML = 'Скачать модель';
-                    downloadButton.classList.add('container'); // Add Material Design class
+                    downloadButton.classList.add('container');
 
                     var checkButton = document.createElement('button');
                     checkButton.id = 'checkButton';
                     checkButton.innerHTML = 'Проверить модель';
-                    checkButton.classList.add('container'); // Add Material Design class
+                    checkButton.classList.add('container');
 
                     var backButton = document.createElement('button');
                     backButton.id = 'backButton';
                     backButton.innerHTML = 'Назад';
-                    backButton.classList.add('container'); // Add Material Design class
+                    backButton.classList.add('container');
 
                     var imageDiv = document.createElement('div');
                     imageDiv.id = 'imageDiv';
@@ -104,18 +104,16 @@
 
                     checkButton.addEventListener('click', function() {
                         var xhrCheck = new XMLHttpRequest();
-                        xhrCheck.open('GET', 'http://127.0.0.1:4444/check_model');
+                        xhrCheck.open('GET', '/check_model');
                         xhrCheck.onload = function() {
                             if (xhrCheck.status === 200) {
                                 var response = JSON.parse(xhrCheck.responseText);
                                 var resultsPath = response.results_path;
-                                console.log(resultsPath);
-                                // console.log(response['results_path'])
-                                var imageUrl = 'http://127.0.0.1:4444/' + resultsPath;
+                                var imageUrl = '/' + resultsPath;
                                 
                                 var img = document.createElement('img');
                                 img.src = imageUrl;
-                                img.classList.add('container'); // Add Material Design class
+                                img.classList.add('container');
                                 imageDiv.innerHTML = '';
                                 imageDiv.appendChild(img);
                             } else {
@@ -132,7 +130,7 @@
                     setTimeout(function() {
                         document.querySelector('.progress').style.display = 'none';
                         document.getElementById("status").style.display = "none";
-                    }, 1000); // 1000 milliseconds = 1 second delay
+                    }, 1000);
                 }
             };
         });
