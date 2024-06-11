@@ -51,7 +51,7 @@ def save_zip():
     os.remove(save_path)
     global TIMER
     TIMER += 10
-    train(epochs)
+    train(epochs, RESOLUTION)
     TIMER = 100
     return "File saved", 200
 
