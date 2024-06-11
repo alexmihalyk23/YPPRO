@@ -46,9 +46,10 @@
     </div>
 
     <button id="sendButton" disabled class="md-button">Start training</button>
-            <div id="status-container">
-            <div id="status"></div>
-            <div id="loader" class="loader" style="display:none;"></div>
+    <div id="status-container">
+        <div id="status"></div>
+        <div id="loader" class="loader" style="display:none;"></div>
+    </div>
 
     <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" style="display:none;">
         <input type="file" name="file" id="hiddenFileInput">
@@ -57,131 +58,134 @@
 
     <script>
         document.getElementById('zipFile').addEventListener('change', function() {
-    var fileInput = document.getElementById('zipFile');
-    var sendButton = document.getElementById('sendButton');
+            var fileInput = document.getElementById('zipFile');
+            var sendButton = document.getElementById('sendButton');
 
-    if (fileInput.files.length > 0) {
-        sendButton.disabled = false;
-        fileInput.disabled = true;
-        document.getElementById('selectButton').innerText = 'File is loaded';
-        document.getElementById('selectButton').disabled = true;
-    } else {
-        sendButton.disabled = true;
-        document.getElementById('selectButton').innerText = 'Choose file';
-        document.getElementById('selectButton').disabled = false;
-    }
-});
+            if (fileInput.files.length > 0) {
+                sendButton.disabled = false;
+                fileInput.disabled = true;
+                document.getElementById('selectButton').innerText = 'File is loaded';
+                document.getElementById('selectButton').disabled = true;
+            } else {
+                sendButton.disabled = true;
+                document.getElementById('selectButton').innerText = 'Choose file';
+                document.getElementById('selectButton').disabled = false;
+            }
+        });
 
-document.getElementById('sendButton').addEventListener('click', function() {
-    var fileInput = document.getElementById('zipFile');
-    var epochsInput = document.getElementById('epochs');
-    // var resolutionInput = document.getElementById('resolution');
-    var file = fileInput.files[0];
-    var epochs = epochsInput.value;
-    // var resolution = resolutionInput.value;
+        document.getElementById('sendButton').addEventListener('click', function() {
+            var fileInput = document.getElementById('zipFile');
+            var epochsInput = document.getElementById('epochs');
+            var resolutionInput = document.getElementById('resolution');
+            var file = fileInput.files[0];
+            var epochs = epochsInput.value;
+            var resolution = resolutionInput.value;
 
-    var formData = new FormData();
-    formData.append('file', file);
-    formData.append('epochs', epochs);
-    // formData.append('resolution', resolution);
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('epochs', epochs);
+            formData.append('resolution', resolution);
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://127.0.0.1:4444');
-    xhr.send(formData);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:4444');
+            xhr.send(formData);
 
-    document.querySelector('.progress').style.display = 'block';
-    document.getElementById('zipFile').style.display = 'none';
-    document.getElementById('selectButton').style.display = 'none';
-    document.getElementById('sendButton').style.display = 'none';
-    document.getElementById('group').style.display = 'none';
+            document.querySelector('.progress').style.display = 'block';
+            document.getElementById('zipFile').style.display = 'none';
+            document.getElementById('selectButton').style.display = 'none';
+            document.getElementById('sendButton').style.display = 'none';
+            document.getElementById('group').style.display = 'none';
 
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var downloadButton = document.createElement('a');
-            downloadButton.id = 'downloadButton';
-            downloadButton.href = 'http://127.0.0.1:4444/download/best.pt';
-            downloadButton.download = 'best.pt';
-            downloadButton.innerHTML = 'Download';
-            downloadButton.classList.add('container');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var downloadButton = document.createElement('a');
+                    downloadButton.id = 'downloadButton';
+                    downloadButton.href = 'http://127.0.0.1:4444/download/best.onnx';
+                    downloadButton.download = 'best.onnx';
+                    downloadButton.innerHTML = 'Download';
+                    downloadButton.classList.add('container');
 
-            var checkButton = document.createElement('button');
-            checkButton.id = 'checkButton';
-            checkButton.innerHTML = 'Check model';
-            checkButton.classList.add('container');
+                    var checkButton = document.createElement('button');
+                    checkButton.id = 'checkButton';
+                    checkButton.innerHTML = 'Check model';
+                    checkButton.classList.add('container');
 
-            var backButton = document.createElement('button');
-            backButton.id = 'backButton';
-            backButton.innerHTML = 'Back';
-            backButton.classList.add('container');
+                    var backButton = document.createElement('button');
+                    backButton.id = 'backButton';
+                    backButton.innerHTML = 'Back';
+                    backButton.classList.add('container');
 
-            var imageDiv = document.createElement('div');
-            imageDiv.id = 'imageDiv';
+                    var imageDiv = document.createElement('div');
+                    imageDiv.id = 'imageDiv';
 
-            // Создаем слайдер и элемент для отображения значения слайдера
-            var confidenceLabel = document.createElement('label');
-            confidenceLabel.for = 'confidenceSlider';
-            confidenceLabel.innerText = 'Choose the confidence value:';
+                    var confidenceContainer = document.createElement('div');
+                    confidenceContainer.className = 'confidence-container';
 
-            var confidenceSlider = document.createElement('input');
-            confidenceSlider.type = 'range';
-            confidenceSlider.id = 'confidenceSlider';
-            confidenceSlider.name = 'confidence';
-            confidenceSlider.min = '0.1';
-            confidenceSlider.max = '1.0';
-            confidenceSlider.step = '0.1';
-            confidenceSlider.value = '0.5';
+                    var confidenceLabel = document.createElement('label');
+                    confidenceLabel.for = 'confidenceSlider';
+                    confidenceLabel.innerText = 'Choose the confidence value:';
 
-            var confidenceValue = document.createElement('span');
-            confidenceValue.id = 'confidenceValue';
-            confidenceValue.innerText = confidenceSlider.value;
+                    var confidenceSlider = document.createElement('input');
+                    confidenceSlider.type = 'range';
+                    confidenceSlider.id = 'confidenceSlider';
+                    confidenceSlider.name = 'confidence';
+                    confidenceSlider.min = '0.1';
+                    confidenceSlider.max = '1.0';
+                    confidenceSlider.step = '0.1';
+                    confidenceSlider.value = '0.5';
 
-            confidenceSlider.addEventListener('input', function() {
-                confidenceValue.innerText = confidenceSlider.value;
-            });
+                    var confidenceValue = document.createElement('span');
+                    confidenceValue.id = 'confidenceValue';
+                    confidenceValue.innerText = confidenceSlider.value;
 
-            document.body.appendChild(downloadButton);
-            document.body.appendChild(backButton);
-            document.body.appendChild(checkButton);
-            document.body.appendChild(confidenceLabel);
-            document.body.appendChild(confidenceSlider);
-            document.body.appendChild(confidenceValue);
-            document.body.appendChild(imageDiv);
+                    confidenceSlider.addEventListener('input', function() {
+                        confidenceValue.innerText = confidenceSlider.value;
+                    });
 
-            checkButton.addEventListener('click', function() {
-                var xhrCheck = new XMLHttpRequest();
-                var confidence = confidenceSlider.value;
+                    confidenceContainer.appendChild(confidenceLabel);
+                    confidenceContainer.appendChild(confidenceSlider);
+                    confidenceContainer.appendChild(confidenceValue);
 
-                xhrCheck.open('GET', 'http://127.0.0.1:4444/check_model?confidence=' + confidence, true);
-                xhrCheck.onload = function() {
-                    if (xhrCheck.status === 200) {
-                        var response = JSON.parse(xhrCheck.responseText);
-                        var resultsPath = response.results_path;
-                        var imageUrl = 'http://127.0.0.1:4444/' + resultsPath;
+                    document.body.appendChild(downloadButton);
+                    document.body.appendChild(backButton);
+                    document.body.appendChild(checkButton);
+                    document.body.appendChild(confidenceContainer);
+                    document.body.appendChild(imageDiv);
 
-                        var img = document.createElement('img');
-                        img.src = imageUrl;
-                        img.classList.add('container');
-                        imageDiv.innerHTML = '';
-                        imageDiv.appendChild(img);
-                    } else {
-                        alert('Ошибка при проверке модели');
-                    }
-                };
-                xhrCheck.send();
-            });
+                    checkButton.addEventListener('click', function() {
+                        var xhrCheck = new XMLHttpRequest();
+                        var confidence = confidenceSlider.value;
 
-            backButton.addEventListener('click', function() {
-                location.reload();
-            });
+                        xhrCheck.open('GET', 'http://127.0.0.1:4444/check_model?confidence=' + confidence, true);
+                        xhrCheck.onload = function() {
+                            if (xhrCheck.status === 200) {
+                                var response = JSON.parse(xhrCheck.responseText);
+                                var resultsPath = response.results_path;
+                                var imageUrl = 'http://127.0.0.1:4444/' + resultsPath;
 
-            setTimeout(function() {
-                document.querySelector('.progress').style.display = 'none';
-                document.getElementById("status").style.display = "none";
-            }, 1000);
-        }
-    };
-});
+                                var img = document.createElement('img');
+                                img.src = imageUrl;
+                                img.classList.add('container');
+                                imageDiv.innerHTML = '';
+                                imageDiv.appendChild(img);
+                            } else {
+                                alert('Ошибка при проверке модели');
+                            }
+                        };
+                        xhrCheck.send();
+                    });
 
+                    backButton.addEventListener('click', function() {
+                        location.reload();
+                    });
+
+                    setTimeout(function() {
+                        document.querySelector('.progress').style.display = 'none';
+                        document.getElementById("status").style.display = "none";
+                    }, 1000);
+                }
+            };
+        });
     </script>
     <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
