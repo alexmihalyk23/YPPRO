@@ -97,8 +97,8 @@ document.getElementById('sendButton').addEventListener('click', function() {
         if (xhr.status === 200) {
             var downloadButton = document.createElement('a');
             downloadButton.id = 'downloadButton';
-            downloadButton.href = 'http://127.0.0.1:4444/download/best.onnx';
-            downloadButton.download = 'best.onnx';
+            downloadButton.href = 'http://127.0.0.1:4444/download/best.pt';
+            downloadButton.download = 'best.pt';
             downloadButton.innerHTML = 'Download';
             downloadButton.classList.add('container');
 
