@@ -165,7 +165,8 @@
 
                                 var img = document.createElement('img');
                                 img.src = imageUrl;
-                                img.classList.add('container');
+                                img.id = 'image';
+                                img.classList.add('image-container');
                                 imageDiv.innerHTML = '';
                                 imageDiv.appendChild(img);
                             } else {
