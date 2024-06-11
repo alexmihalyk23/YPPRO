@@ -16,7 +16,7 @@ VALID_DATA_PERCENTAGE = 0.2
 BUSY = False
 
 
-def train_yolo(path, epochs_n=2):
+def train_yolo(path, epochs_n=2, res=448):
     global BUSY
     if BUSY is True:
         return False, '' # png_path
@@ -55,22 +55,23 @@ def train_yolo(path, epochs_n=2):
     savedPath = os.getcwd()
     os.chdir(os.getcwd()+'/yolov5/')
     command = os.getcwd()+'/train.py'
-    params = f'--weights {weights} --data {config_dir} --cfg {model_dir} --batch {batch} --freeze {freeze} --epochs {num_epochs} --project {result_dir}'
+    params = f'--weights {weights} --data {config_dir} --imgsz {res} --cfg {model_dir} --batch {batch} --freeze {freeze} --epochs {num_epochs} --project {result_dir}'
     popen = subprocess.Popen('python3 '+ command +' ' +  params, executable='/bin/bash', shell=True)
     popen.wait()
     os.chdir(savedPath)
     BUSY = False
     png_path = os.path.join(result_dir, 'results.png')
     return True, png_path
-def check_model(path, conf=0.1):
-    weights_path = os.path.join(PRE_PATH, 'best.onnx')
+def check_model(path, conf=0.1, res=448):
+    
+    weights_path = os.path.join(PRE_PATH, 'best.pt')
     test_images_dir = os.path.join(PRE_PATH, path, 'test/images')
     source = os.path.join(PRE_PATH, 'data/images')  # Path to images for testing
     os.chdir(os.getcwd()+'/yolov5')
     command = os.getcwd()+'/detect.py'
     result_path = os.path.join(PRE_PATH, 'detect_results')
     img = random.choice(os.listdir(test_images_dir))
-    params = f'--weights {weights_path} --source {test_images_dir}/{img} --project {result_path}  --conf-thres {conf}'
+    params = f'--weights {weights_path} --source {test_images_dir}/{img} --imgsz {res} --project {result_path}  --conf-thres {conf}'
     popen = subprocess.Popen('python3 '+ command +' ' +  params, executable='/bin/bash', shell=True)
     popen.wait()
     os.chdir(PRE_PATH)
@@ -112,14 +113,14 @@ def bestpt_copy():
 
 def pt2onnx(path):
     proj_dir = PRE_PATH #os.path.join(PRE_PATH, path)
-    weights_path = os.path.join(proj_dir, 'best.pt')
-    config_file = os.path.join(PRE_PATH, path, 'custom.yaml')
-    opt = export.parse_opt()
-    opt.weights = weights_path
-    opt.data = config_file
-    opt.opset = 11
-    export.main(opt)
-    onnx_path = os.path.join(proj_dir, 'best.onnx')
+    # weights_path = os.path.join(proj_dir, 'best.pt')
+    # config_file = os.path.join(PRE_PATH, path, 'custom.yaml')
+    # opt = export.parse_opt()
+    # opt.weights = weights_path
+    # opt.data = config_file
+    # opt.opset = 11
+    # export.main(opt)
+    onnx_path = os.path.join(proj_dir, 'best.pt')
     return onnx_path
 
 def onnx2tmfile():
