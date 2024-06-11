@@ -208,3 +208,17 @@ label[for="epochs"], label[for="resolution"] {
     font-family: monospace;
     color: #ffffff;
 }
+
+#imageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+}
+
+#image {
+    max-width: 100%;
+    height: auto;
+}
