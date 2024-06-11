@@ -38,7 +38,7 @@ pip3 install -r requirements.txt
 - Чтобы загрузить модель, нажать на кнопку **Download**.
 - Для повторного обучения нажать на кнопку **Back**, она вернет на главную страницу.
 - Чтобы проверить точность модели, нужно выбрать **confidence** c помощью слайдера, а затем нажать на кнопку **Check model**, после чего будет показана картинка с bounding box, confidence которого больше, либо равна заданному ранее.
-![Завершение2](https://github.com/alexmihalyk23/YPPRO/raw/actions_test/readme_img/2024-06-12%2000.48.58.jpg)
+![Завершение2](https://github.com/alexmihalyk23/YPPRO/raw/actions_test/readme_img/End2)
 
 ## Участие
 - Михайлюк Алексей: сервер
