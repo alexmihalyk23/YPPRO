@@ -74,7 +74,8 @@ def uploaded_file(filename):
 
 @app.route('/check_model')
 def check_model_route():
-    results_path = bot_utils.check_model('dataset')
+    confidence = float(request.args.get('confidence', 0.5))  # Получите значение confidence, по умолчанию 0.5
+    results_path = bot_utils.check_model('dataset', confidence)  # Передайте значение confidence в функцию
     return jsonify({'results_path': results_path})
 @app.route('/<path:path>')
 def serve_static(path):
