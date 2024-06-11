@@ -19,6 +19,7 @@
         }
     }
     </script>
+
     <title>Zip2yolo</title>
 </head>
 <body>
@@ -33,7 +34,7 @@
         </label>
     </div>
 
-    <div class="form-group-horizontal">
+    <div class="form-group-horizontal" id="group">
         <label for="epochs">Epochs number: </label>
         <input type="number" name="epochs" id="epochs" min="1" value="2">
         <label for="resolution">Choose resolution:</label>
@@ -92,6 +93,7 @@ document.getElementById('sendButton').addEventListener('click', function() {
     document.getElementById('zipFile').style.display = 'none';
     document.getElementById('selectButton').style.display = 'none';
     document.getElementById('sendButton').style.display = 'none';
+    document.getElementById('group').style.display = 'none';
 
     xhr.onload = function() {
         if (xhr.status === 200) {
@@ -138,8 +140,8 @@ document.getElementById('sendButton').addEventListener('click', function() {
             });
 
             document.body.appendChild(downloadButton);
-            document.body.appendChild(checkButton);
             document.body.appendChild(backButton);
+            document.body.appendChild(checkButton);
             document.body.appendChild(confidenceLabel);
             document.body.appendChild(confidenceSlider);
             document.body.appendChild(confidenceValue);
