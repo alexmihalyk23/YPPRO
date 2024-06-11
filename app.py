@@ -7,7 +7,9 @@ from dialog_manager import flaskbot_utils as bot_utils
 UPLOAD_FOLDER = os.getcwd()
 app = Flask(__name__)
 TIMER = 0
-
+def update_timer(progress):
+    global TIMER
+    TIMER = progress
 print(os.getcwd())
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 PRE_PATH = os.getcwd()
@@ -16,16 +18,16 @@ RESOLUTION = 448
 def train(epochs=2, resolution=448):
     global TIMER
     print("Training started...")
-    TIMER = 20
-    train_res, _ = bot_utils.train_yolo('dataset', epochs, resolution)
+    # TIMER = 20
+    train_res, _ = bot_utils.train_yolo('dataset', epochs, resolution, update_timer)
     if not train_res:  # Тренировка не была запущена.
         print('train_res', train_res)
-    TIMER = 30
+    # TIMER = 30
     bot_utils.bestpt_copy()
-    TIMER += 10
+    # TIMER += 10
     model_path = bot_utils.pt2onnx('dataset')
-    TIMER += 10
-    TIMER += 25
+    # TIMER += 10
+    # TIMER += 25
     return model_path
 
 @app.route('/')
@@ -50,7 +52,8 @@ def save_zip():
     shutil.unpack_archive(save_path, 'dataset')
     os.remove(save_path)
     global TIMER
-    TIMER += 10
+    # TIMER += 10
+    print("EEEE", epochs)
     train(epochs, RESOLUTION)
     TIMER = 100
     return "File saved", 200
