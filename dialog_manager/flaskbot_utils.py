@@ -16,11 +16,11 @@ VALID_DATA_PERCENTAGE = 0.2
 BUSY = False
 
 
-def train_yolo(path, epochs_n):
+def train_yolo(path, epochs_n=2):
     global BUSY
     if BUSY is True:
         return False, '' # png_path
-    epochs_n = 3 # get_epoch_n()
+    
     proj_dir = PRE_PATH # os.path.join(PRE_PATH, path)
     weights = 'yolov5m_leaky.pt'
     batch = 2
@@ -62,7 +62,7 @@ def train_yolo(path, epochs_n):
     BUSY = False
     png_path = os.path.join(result_dir, 'results.png')
     return True, png_path
-def check_model(path):
+def check_model(path, conf=0.1):
     weights_path = os.path.join(PRE_PATH, 'best.onnx')
     test_images_dir = os.path.join(PRE_PATH, path, 'test/images')
     source = os.path.join(PRE_PATH, 'data/images')  # Path to images for testing
@@ -70,7 +70,7 @@ def check_model(path):
     command = os.getcwd()+'/detect.py'
     result_path = os.path.join(PRE_PATH, 'detect_results')
     img = random.choice(os.listdir(test_images_dir))
-    params = f'--weights {weights_path} --source {test_images_dir}/{img} --project {result_path}'
+    params = f'--weights {weights_path} --source {test_images_dir}/{img} --project {result_path}  --conf-thres {conf}'
     popen = subprocess.Popen('python3 '+ command +' ' +  params, executable='/bin/bash', shell=True)
     popen.wait()
     os.chdir(PRE_PATH)

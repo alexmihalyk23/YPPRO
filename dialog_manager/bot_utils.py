@@ -403,7 +403,8 @@ def train_yolo(path):
     epochs_n = 300 # get_epoch_n()
     proj_dir = os.path.join(PRE_PATH, str(path))
     weights = 'yolov5m_leaky.pt'
-    batch = 16
+    batch = 2
+    imgsz = 416
     num_epochs = epochs_n
     result_dir = os.path.join(proj_dir,'train')
     data_dir = os.path.join(proj_dir,'dataset')
@@ -418,7 +419,7 @@ def train_yolo(path):
     savedPath = os.getcwd()
     os.chdir('/root/bot_lite/yolov5/')
     command = '/root/bot_lite/yolov5/train.py'
-    params = f'--weights {weights} --data {config_dir} --cfg {model_dir} --batch {batch} --freeze {freeze} --epochs {num_epochs} --project {result_dir}'
+    params = f'--weights {weights} --data {config_dir} --cfg {model_dir} --imgsz {imgsz}--batch {batch} --freeze {freeze} --epochs {num_epochs} --project {result_dir}'
     popen = subprocess.Popen('python3 '+ command +' ' +  params, executable='/bin/bash', shell=True)
     popen.wait()
     os.chdir(savedPath)
