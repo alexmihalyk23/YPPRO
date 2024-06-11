@@ -12,27 +12,29 @@
         $('.progress-bar').css('width', event.data+'%').attr('aria-valuenow', event.data);
         $('.progress-bar-label').text(event.data+'%');
         if(event.data == 20){
-            document.getElementById("status").innerHTML = "Обучение";
+            document.getElementById("status").innerHTML = "Training...";
         }
         else if (event.data == 40){
-            document.getElementById("status").innerHTML = "Создание onnx файла";
+            document.getElementById("status").innerHTML = "Creating onnx file...";
         }
     }
     </script>
     <title>Zip2yolo</title>
 </head>
 <body>
-    <h1>Выберите zip архив</h1>
+    <h1>Choose zip file</h1>
     <div class="container">
         <label class="attach-file">
             <input type="file" name="file" id="zipFile" accept=".zip"/>
-            <div class="button" id="selectButton">Выберите файл</div>
+            <div class="button" id="selectButton" style="font-family: monospace;">Choose file</div>
         </label>
     </div>
-    <label for="epochs">Количество эпох:</label>
+
+    <label for="epochs">Epochs number: </label>
     <input type="number" name="epochs" id="epochs" min="1" value="2">
-    <button id="sendButton" disabled class="md-button">Обучить!</button>
+    <button id="sendButton" disabled class="md-button">Start training</button>
     <div id="status"></div>
+
     <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" style="display:none;">
         <input type="file" name="file" id="hiddenFileInput">
         <input type="number" name="epochs" id="hiddenEpochsInput">
@@ -46,11 +48,11 @@
     if (fileInput.files.length > 0) {
         sendButton.disabled = false;
         fileInput.disabled = true;
-        document.getElementById('selectButton').innerText = 'Загружено!';
+        document.getElementById('selectButton').innerText = 'File is loaded';
         document.getElementById('selectButton').disabled = true;
     } else {
         sendButton.disabled = true;
-        document.getElementById('selectButton').innerText = 'Выберите файл';
+        document.getElementById('selectButton').innerText = 'Choose file';
         document.getElementById('selectButton').disabled = false;
     }
 });
@@ -80,17 +82,17 @@ document.getElementById('sendButton').addEventListener('click', function() {
             downloadButton.id = 'downloadButton';
             downloadButton.href = 'http://127.0.0.1:4444/download/best.onnx';
             downloadButton.download = 'best.onnx';
-            downloadButton.innerHTML = 'Скачать модель';
+            downloadButton.innerHTML = 'Download';
             downloadButton.classList.add('container');
 
             var checkButton = document.createElement('button');
             checkButton.id = 'checkButton';
-            checkButton.innerHTML = 'Проверить модель';
+            checkButton.innerHTML = 'Check model';
             checkButton.classList.add('container');
 
             var backButton = document.createElement('button');
             backButton.id = 'backButton';
-            backButton.innerHTML = 'Назад';
+            backButton.innerHTML = 'Back';
             backButton.classList.add('container');
 
             var imageDiv = document.createElement('div');
@@ -99,7 +101,7 @@ document.getElementById('sendButton').addEventListener('click', function() {
             // Создаем слайдер и элемент для отображения значения слайдера
             var confidenceLabel = document.createElement('label');
             confidenceLabel.for = 'confidenceSlider';
-            confidenceLabel.innerText = 'Выберите значение confidence:';
+            confidenceLabel.innerText = 'Choose the confidence value:';
 
             var confidenceSlider = document.createElement('input');
             confidenceSlider.type = 'range';
