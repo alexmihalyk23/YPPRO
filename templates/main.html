@@ -22,7 +22,9 @@
     <title>Zip2yolo</title>
 </head>
 <body>
-    <h1>ZIP2YOLO</h1>
+    <header>
+        <h1>ZIP2YOLO</h1>
+    </header>
     <h2>To start training the neural network, select your dataset and specify the number of epochs, and then click the “start training” button.</h2>
     <div class="container">
         <label class="attach-file">
@@ -31,10 +33,21 @@
         </label>
     </div>
 
-    <label for="epochs">Epochs number: </label>
-    <input type="number" name="epochs" id="epochs" min="1" value="2">
+    <div class="form-group-horizontal">
+        <label for="epochs">Epochs number: </label>
+        <input type="number" name="epochs" id="epochs" min="1" value="2">
+        <label for="resolution">Choose resolution:</label>
+        <select name="resolution" id="resolution">
+            <option value="448">448</option>
+            <option value="640">640</option>
+            <option value="960">960</option>
+        </select>
+    </div>
+
     <button id="sendButton" disabled class="md-button">Start training</button>
-    <div id="status"></div>
+            <div id="status-container">
+            <div id="status"></div>
+            <div id="loader" class="loader" style="display:none;"></div>
 
     <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" style="display:none;">
         <input type="file" name="file" id="hiddenFileInput">
@@ -61,12 +74,15 @@
 document.getElementById('sendButton').addEventListener('click', function() {
     var fileInput = document.getElementById('zipFile');
     var epochsInput = document.getElementById('epochs');
+    // var resolutionInput = document.getElementById('resolution');
     var file = fileInput.files[0];
     var epochs = epochsInput.value;
+    // var resolution = resolutionInput.value;
 
     var formData = new FormData();
     formData.append('file', file);
     formData.append('epochs', epochs);
+    // formData.append('resolution', resolution);
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://127.0.0.1:4444');
