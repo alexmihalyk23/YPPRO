@@ -11,11 +11,8 @@
     source.onmessage = function(event) {
         $('.progress-bar').css('width', event.data+'%').attr('aria-valuenow', event.data);
         $('.progress-bar-label').text(event.data+'%');
-        if(event.data == 20){
+        if(event.data >= 0){
             document.getElementById("status").innerHTML = "Training...";
-        }
-        else if (event.data == 40){
-            document.getElementById("status").innerHTML = "Creating onnx file...";
         }
     }
     </script>
