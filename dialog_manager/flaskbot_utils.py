@@ -1,62 +1,61 @@
 import os
 import shutil
-import PIL
-import base64
-import io
-import numpy as np
-import json
 import subprocess
 import random
-
+import re
 import yolov5.detect as detect
-import yolov5.export as export
 
 PRE_PATH = os.getcwd()
 VALID_DATA_PERCENTAGE = 0.2
 BUSY = False
 
-
-def train_yolo(path, epochs_n=2, res=448):
+def train_yolo(path, epochs_n=2, res=448, update_timer_callback=None):
     global BUSY
     if BUSY is True:
-        return False, '' # png_path
-    
-    proj_dir = PRE_PATH # os.path.join(PRE_PATH, path)
+        return False, ''  # png_path
+
+    proj_dir = PRE_PATH
     weights = 'yolov5m_leaky.pt'
     batch = 2
     num_epochs = epochs_n
-    result_dir = os.path.join(proj_dir,'train')
+    result_dir = os.path.join(proj_dir, 'train')
     data_dir = os.path.join(proj_dir, path)
-    config_dir = os.path.join(data_dir,'data.yaml')
+    config_dir = os.path.join(data_dir, 'data.yaml')
     new_lines = [
-    'train: ../dataset/train/images\n',
-    'val: ../dataset/valid/images\n',
-    'test: ../dataset/test/images\n']
+        'train: ../dataset/train/images\n',
+        'val: ../dataset/valid/images\n',
+        'test: ../dataset/test/images\n'
+    ]
 
-# Read the contents of the file
     with open(os.path.join(data_dir, 'data.yaml'), 'r') as file:
         lines = file.readlines()
-
-# Replace the first three lines with the new lines
     lines[:3] = new_lines
-
-# Write the modified lines back to the file
     with open(os.path.join(data_dir, 'data.yaml'), 'w') as file:
         file.writelines(lines)
 
     model_dir = os.path.join(PRE_PATH, 'yolov5/models/yolov5m.yaml')
-    #_, weights = model_scan(path) Всегда начинаем тренировку с 'yolov5m_leaky.pt'
     weights = '../yolov5m_leaky.pt'
     freeze = 10
-    if not os.path.exists(data_dir+'valid/labels'):  os.makedirs(data_dir+'valid/labels')
-    # if len(os.listdir(os.path.join(data_dir,'valid/labels'))) <= 1:
-    #     return 'Добавьте ещё данных. Тренировка не была запущена.', '' # png_path
+    if not os.path.exists(data_dir+'valid/labels'):
+        os.makedirs(data_dir+'valid/labels')
     BUSY = True
     savedPath = os.getcwd()
-    os.chdir(os.getcwd()+'/yolov5/')
-    command = os.getcwd()+'/train.py'
+    os.chdir(os.getcwd() + '/yolov5/')
+    command = os.getcwd() + '/train.py'
+    print("num_epochs", num_epochs)
     params = f'--weights {weights} --data {config_dir} --imgsz {res} --cfg {model_dir} --batch {batch} --freeze {freeze} --epochs {num_epochs} --project {result_dir}'
-    popen = subprocess.Popen('python3 '+ command +' ' +  params, executable='/bin/bash', shell=True)
+
+    popen = subprocess.Popen(f'python3 {command} {params}', shell=True, executable='/bin/bash', stdout=subprocess.PIPE, text=True)
+
+    stdout_lines = []
+    for line in iter(popen.stdout.readline, ''):
+        stdout_lines.append(line.strip())
+        print(stdout_lines)
+        if 'Epoch' in line:
+            current_epoch = int(re.search(r'Epoch (\d+)', line).group(1))
+            print(current_epoch)
+            if update_timer_callback:
+                update_timer_callback(current_epoch / num_epochs * 100)
     popen.wait()
     os.chdir(savedPath)
     BUSY = False
