@@ -1,13 +1,18 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
+const fs = require('fs');
 
 (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
-    // Путь к файлу index.html в папке templates
-    const filePath = `file://${path.join(__dirname, '/templates/index.html')}`;
-    await page.goto(filePath);
+    const filePath = path.resolve(__dirname, '../templates/index.html');
+    if (!fs.existsSync(filePath)) {
+        console.error(`File not found: ${filePath}`);
+        process.exit(1);
+    }
+
+    await page.goto(`file://${filePath}`);
 
     const fileInput = await page.$('#zipFile');
     const sendButton = await page.$('#sendButton');
