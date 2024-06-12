@@ -330,14 +330,16 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
                 if ema:
                     ema.update(model)
                 last_opt_step = ni
-
+            print(f'Epoch {epoch+1}')
             # Log
             if RANK in [-1, 0]:
+                
                 mloss = (mloss * i + loss_items) / (i + 1)  # update mean losses
                 mem = f'{torch.cuda.memory_reserved() / 1E9 if torch.cuda.is_available() else 0:.3g}G'  # (GB)
                 pbar.set_description(('%10s' * 2 + '%10.4g' * 5) % (
-                    f'{epoch}/{epochs - 1}', mem, *mloss, targets.shape[0], imgs.shape[-1]))
+                    f'Epoch {epoch}/{epochs-1}', mem, *mloss, targets.shape[0], imgs.shape[-1]))
                 callbacks.run('on_train_batch_end', ni, model, imgs, targets, paths, plots, opt.sync_bn)
+                
             # end batch ------------------------------------------------------------------------------------------------
 
         # Scheduler

@@ -2,10 +2,18 @@ body {
     background-color: #303135;
 }
 
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background-color: #EBDBFA;
+  padding: 30px 10px;
+}
+
 h1 {
-    color: #ffffff;
+    color: black;
     text-align: left;
-    margin-top: 50px;
     margin-left: 20px;
     font-family: monospace;
 }
@@ -16,24 +24,24 @@ h2 {
     margin-top: 80px;
     margin-left: 20px;
     font-family: monospace;
+    font-size: 24px;
 }
 
 span {
     font-family: sans-serif;
 }
 
-label[for="epochs"] {
+label[for="epochs"], label[for="resolution"] {
     font-family: monospace;
     font-size: 16px; 
     font-weight: bold; 
     color: #CE8fff; 
     text-align: center;
-    margin-top: 50px;
-    margin-bottom: 10px; 
-    display: block; 
+    margin: 10px 10px 10px 0; 
+    display: block;
 }
 
-#epochs {
+#epochs, #resolution, #confidenceSlider {
     width: 100px;
     padding: 10px; 
     border: 2px solid #9246CD; 
@@ -43,15 +51,14 @@ label[for="epochs"] {
     background-color: #595B62;  
     color: #CE8fff; 
     text-align: center; 
-    margin: 10px auto; 
-    display: block; 
+    margin: 10px 10px 10px 0; 
+    display: block;
 }
-
 
 .attach-file input[type="file"] {
     display: none;
 }
-        
+
 .attach-file .button {
     padding: 15px 75px;
     background-color: #595B62;
@@ -75,8 +82,31 @@ label[for="epochs"] {
     font-size: 24px;
 }
 
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#status-container {
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #downloadButton {
-    padding: 15px 75px;
+    padding: 15px 115px;
     background-color: #595B62;
     color: #75DF86;
     border: 5px solid #3C964A;
@@ -93,8 +123,10 @@ label[for="epochs"] {
 }
 
 /* Material Design Button Style */
-.md-button, #selectButton #backButton, #zipFile::file-selector-button {
+.md-button, #backButton, #checkButton {
     padding: 15px 75px;
+    width: 450px;
+    height: 75px;
     background-color: #595B62;
     color: #CE8fff;
     border: 5px solid #9246CD;
@@ -107,11 +139,14 @@ label[for="epochs"] {
     margin: 0 auto;
     display: flex;
     margin-top: 50px;
+    justify-content: center;
 }
 
-.container {
-display: flex;
-justify-content: center;
+.container, #image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .progress {
@@ -137,7 +172,6 @@ justify-content: center;
     border-radius: 30px; 
 }
 
-/* Material Design Input Style */
 .md-input {
     display: block;
     width: 300px;
@@ -146,11 +180,45 @@ justify-content: center;
     border-radius: 4px;
     font-size: 16px;
     margin-bottom: 10px;
+}
 
 .status-label {
     font-size: 18px;
-    font-family: sans-serif;
+    font-family: monospace;
     font-weight: bold;
     color: #ffffff;
 }
 
+.form-group-horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+    margin-top: 50px;
+    font-family: monospace;
+    font-size: 20px;
+}
+
+.confidence-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 20px;
+    font-family: monospace;
+    color: #ffffff;
+}
+
+#imageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+}
+
+#image {
+    max-width: 100%;
+    height: auto;
+}
