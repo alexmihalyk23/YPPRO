@@ -21,5 +21,5 @@ jobs:
     - run: npm install puppeteer
 
     - name: Run tests
-      run: node test/testZipFile.js
+      run: node tests/testZipFile.js
 
