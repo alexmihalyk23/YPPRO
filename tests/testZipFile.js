@@ -6,7 +6,7 @@ const path = require('path');
     const page = await browser.newPage();
 
     // Путь к файлу index.html в папке templates
-    const filePath = `file://${path.join(__dirname, '../templates/index.html')}`;
+    const filePath = `file://${path.join(__dirname, '/templates/index.html')}`;
     await page.goto(filePath);
 
     const fileInput = await page.$('#zipFile');
