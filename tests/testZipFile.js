@@ -6,7 +6,7 @@ const fs = require('fs');
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
-    const filePath = path.resolve(__dirname, '../templates/index.html');
+    const filePath = path.resolve('../templates/index.html');
     if (!fs.existsSync(filePath)) {
         console.error(`File not found: ${filePath}`);
         process.exit(1);
