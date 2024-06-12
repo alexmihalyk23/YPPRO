@@ -5,10 +5,10 @@
 ![Главная страница](https://github.com/alexmihalyk23/YPPRO/raw/main/readme_img/Start.png)
 ## Обучение
 В процессе обучения виден прогресс-бар, показывающий текущий статус выполнения.
-![Обучение](https://github.com/alexmihalyk23/YPPRO/raw/actions_test/main/Train.png)
+![Обучение](https://github.com/alexmihalyk23/YPPRO/raw/main/Train.png)
 ## Завершение
 После обучения можно загрузить полученную модель, а также быстро проверить её работу, задав показатель **confidence**, что поможет выяснить, достаточно ли обучилась модель.
-![Завершение](https://github.com/alexmihalyk23/YPPRO/raw/actions_test/main/End1.png)
+![Завершение](https://github.com/alexmihalyk23/YPPRO/raw/main/End1.png)
 
 # Установка и запуск
 
